@@ -1,6 +1,6 @@
 data_set <- read.csv("Baseball_Databank_Teams_1871_2023_Modded.csv")
 
-# 1. Covariance matrices
+# 1. Covariance Matrices
 pairs <- list(c("R", "E"), c("R", "HR"), c("R", "RA"), c("R", "SOA"), c("E", "HR"), c("E", "RA"), c("E", "SOA"), c("HR", "RA"), c("HR", "SOA"), c("RA", "SOA"))
 covariances <- list()
 correlations <- list()
@@ -17,7 +17,7 @@ for (i in seq_along(pairs)) {
 	cat("\n\n")
 }
 
-# 2. Scatter plots
+# 2. Scatter Plots
 plot(data_set$AB, data_set$H,
 	xlab = "At Bats",
 	ylab = "Hits By Batters")
@@ -38,19 +38,19 @@ for (team in teams) {
 		main = paste(team, "(2014-2023)"))
 }
 
-# 4. Box plots
+# 4. Box Plots
 
 
-# 5. Supervised scatter plots
+# 5. Supervised Scatter Plots
 
 
-# 6. Density plots
+# 6. Density Plots
 
 
-# 7. Table of all teams who won World Series
+# 7. Table & Histograms
 
 
-# 8. New dataset
+# 8. Linear Model
 
 
-# 9. Decision tree models
+# 9. Decision Tree Models
