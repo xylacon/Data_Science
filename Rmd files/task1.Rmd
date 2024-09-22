@@ -107,7 +107,9 @@ create_scatter_plots(data)
 
 ### Interpretation:
 
-placeholder text
+1.  **At bats vs Hits by batters**: The points on this scatter plot are generally clustered along a diagonal line, indicating a strong, positive, and linear correlation between the number of at-bats and the number of hits by batters. Thus, as the number of at-bats increases, the number of hits by batters tends to increase as a result. However, some variation exists in this trend, notably with larger AB values, which suggests that other factors may influence the number of hits by batters.
+
+2.  **Hits allowed vs Walks allowed**: The points on this scatter plot are scattered than that of the previous plot, indicating a somewhat weaker correlation between the number of hits allowed and the number of walks allowed. This correlation is still linear, but it is not as strong as the relationship between the number of at-bats and the number of hits by batters.
 
 ------------------------------------------------------------------------
 
@@ -169,11 +171,13 @@ for (team in random_teams) {
 
 ### Interpretation:
 
-1.  Houston Astros (2004-2013 and 2014-2023)
+These histograms show the distribution of the nominal Target attribute, which ascribes a categorical value to the team's year based on its winning percentage, over the periods 2004 to 2013 and 2014 to 2023.
 
-2.  Oakland Athletics (2004-2013 and 2014-2023)
+1.  **Houston Astros (2004-2013 and 2014-2023)**: Between 2004 and 2013, the Houston Astros had a majority of years with an average winning percentage. Three years in this period had a low winning percentage, while no years had a high percentage. Between 2014 and 2023, the Astros still had a majority of years with an average winning percentage, but three years in this period had a high percentage and no years had a low winning percentage. Thus, these two histograms suggest that the Houston Astros experienced a positive shift in their performance and transitioned from having low-to-average winning percentages to having average-to-high winning percentages.
 
-3.  Texas Rangers (2004-2013 and 2014-2023)
+2.  **Oakland Athletics (2004-2013 and 2014-2023)**: Between 2004 and 2013, the Oakland Athletics had an average winning percentage for all years in the examined time period, with no low or high target values. Between 2014 and 2023, the Athletics still had a majority of average winning percentages, but had a low target value for two years in this period. Thus, these two histograms suggest that the Oakland Athletics experienced a decline in their performance between the years 2014 and 2023 compared to the previous decade.
+
+3.  **Texas Rangers (2004-2013 and 2014-2023)**: Between 2004 and 2013, the Texas Rangers had an average winning percentage for all years in the examined time period, with no low or high target values. Between 2014 and 2023, the Rangers still had a majority of average winning percentages, but had a low target value for two years in this period. Thus, these two histograms suggest that, similarly to the Oakland Athletics, the Texas Rangers experienced a decline in their performance between the years 2014 and 2023 compared to the previous decade.
 
 ------------------------------------------------------------------------
 
@@ -208,7 +212,23 @@ create_boxplots(data_filtered, "SB")
 
 ### Interpretation:
 
-BB (Walks by Batters):
+***BB (Walks by Batters)***:
+
+1.  **Average**: The boxplot for the Average Target class instances shows a median BB value around 500, with a relatively small interquartile range, a generally symmetrical distribution of values, and several outliers above 700 and below 300.
+2.  **High**: The boxplot for the High Target class instances shows a median BB value slightly above 500, with a larger interquartile range and spread than the Average class, a left-skewed distribution of values, and a small number of outliers below 100.
+3.  **Low**: The boxplot for the Low Target class instances shows a median BB value below 500, with a slightly smaller interquartile range than the High class, a moderately left-skewed distribution of values, and several outliers below 100.
+4.  **All instances**: The boxplot for all instances shows a median BB value just below 500, with a relatively small interquartile range, a symmetrical distribution of values, and several outliers below 300.
+
+These boxplots suggest that teams in the High Target class tend to receive a higher number of walks by batters, while teams in the Low Target class tend to receive a lower number of walks by batters.
+
+***SB (Stolen Bases)***:
+
+1.  **Average**: The boxplot for the Average Target class instances shows a median SB value slightly below 100, with a relatively small interquartile range and several outliers above 200 stolen bases.
+2.  **High**: The boxplot for the High Target class instances shows a median SB value around 100, with a large interquartile range and a right-skewed distribution of values, indicating more variability. A small number of outliers exist, with values around and above 400.
+3.  **Low**: The boxplot for the Low Target class instances shows a median SB value below 100, with an interquartile range between those of the Average and High Target classes. A small number of outliers exist, with values around and above 300.
+4.  **All instances**: The boxplot for all instances shows a median SB value around 300, between those of the Average and High Target, and a relatively small interquartile range. A large number of outliers exist above 250.
+
+The boxplots suggest that the SB values are generally similar across the different Target classes, with some variation in the spread and median values. The Low Target class has a slightly lower median SB value and a larger spread, indicating that batters in this class tend to have fewer stolen bases. The High Target class has a slightly higher median SB value and a larger spread, suggesting that batters in this class may have more stolen bases. However, the overall distribution of SB values is relatively consistent across all Target classes.
 
 ------------------------------------------------------------------------
 
@@ -495,4 +515,4 @@ Based on the generated decision trees, the most important variable for determini
 
 ## Step 10: Conclusion
 
-placeholder text, put conclusion here. At most 13 sentences.
+This project gave us an in-depth look into baseball team performance by analyzing relationships between 35 variables and success metrics. Correlations between attributes like runs, home runs, and strikeouts demonstrated that offensive power is closely linked to team success, while defensive attributes like fielding percentage and strikeouts by pitchers showed moderate correlations with win percentages. In contrast, attributes like errors had weak predictive power. Box plots and density plots revealed stark differences in performance between high, average, and low-performing teams, particularly in walks, stolen bases, and win-error ratios, emphasizing how certain metrics play a crucial role in consistent success. The decision tree models shows that a small number of key attributes (R, SV, RA) could predict a team's success. Through all these analyses, the project emphasized how both offensive and defensive metrics, especially consistency in maximizing strikeouts and runs, are critical for baseball success.
