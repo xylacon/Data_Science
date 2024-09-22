@@ -22,7 +22,6 @@ library(tidyverse)
 library(corrplot)
 library(rmarkdown)
 library(gridExtra)
-library(random)
 
 library(tidyverse)
 library(rpart)
@@ -54,15 +53,12 @@ compute_cov_cor <- function(data) {
 # Call the function to compute covariance and correlation
 results <- compute_cov_cor(data)
 
-# Display Covariance Matrix
 cat("Covariance Matrix:\n")
 print(results$cov_matrix)
 
-# Display Correlation Matrix
 cat("\nCorrelation Matrix:\n")
 print(results$cor_matrix)
 
-# Visualize the Correlation Matrix
 corrplot(results$cor_matrix, method = "color", title = "Correlation Matrix", mar=c(0,0,1,0))
 ```
 
@@ -103,7 +99,6 @@ create_scatter_plots <- function(data) {
     labs(title="Hits Allowed vs Walks Allowed", x="Hits Allowed (HA)", y="Walks Allowed (BBA)") +
     theme_minimal()
   
-  # Arrange plots side by side
   gridExtra::grid.arrange(p1, p2, ncol = 2)
 }
 
@@ -128,7 +123,7 @@ I used a set `randomness seed (31)` in this code so that the analysis section wo
 # Filter the dataset for years after 2004
 data_after_2004 <- data %>% filter(yearID >= 2004)
 
-# Randomly select two teams excluding the Houston Astros
+# Randomly select two teams, excluding the Houston Astros
 teams_list <- unique(data_after_2004$name)
 teams_list <- teams_list[teams_list != "Houston Astros"]
 
@@ -137,7 +132,6 @@ set.seed(30)  # seed for reproducibility
 random_teams <- sample(teams_list, 2)
 random_teams <- c("Houston Astros", random_teams) 
 
-# create histograms
 create_histograms <- function(team_name, data) {
   data_2004_2013 <- data %>% filter(name == team_name & yearID >= 2004 & yearID <= 2013)
   data_2014_2023 <- data %>% filter(name == team_name & yearID >= 2014 & yearID <= 2023)
@@ -163,11 +157,9 @@ p2 <- ggplot(data_2014_2023, aes(x=TARGET, fill=TARGET)) +
   theme_minimal()+
   theme(legend.position = "none")
 
-  # Arrange side by side
   gridExtra::grid.arrange(p1, p2, ncol = 2)
 }
 
-# Generate histograms for the three teams
 for (team in random_teams) {
   print(paste("Creating histograms for team:", team))
   create_histograms(team, data_after_2004)
@@ -194,19 +186,16 @@ data_filtered <- data %>% filter(!is.na(TARGET))
 # create box plots for a specific attribute and compare across TARGET classes
 create_boxplots <- function(data, attribute) {
   
-  # Box plot for the attribute grouped by TARGET class (Low, Average, High)
   p1 <- ggplot(data, aes(x=TARGET, y=get(attribute), fill=TARGET)) +
     geom_boxplot() +
     labs(title=paste(attribute, "by TARGET Class"), x="TARGET Class", y=attribute) +
     theme_minimal()
   
-  # Box plot for the attribute for all instances in the dataset
   p2 <- ggplot(data, aes(x="All Instances", y=get(attribute))) +
     geom_boxplot(fill="lightblue") +
     labs(title=paste(attribute, "for All Instances"), x="All Instances", y=attribute) +
     theme_minimal()
 
-  # Arrange box plots side by side
   gridExtra::grid.arrange(p1, p2, ncol = 2)
 }
 
@@ -229,10 +218,8 @@ BB (Walks by Batters):
 # Filter out data that has the TARGET column (High/Average/Low)
 data_filtered <- data %>% filter(!is.na(TARGET))
 
-# create scatter plots with TARGET as the class variable
 create_supervised_scatterplot <- function(data, x_attr, y_attr) {
   
-  # Create scatter plot
   plot <- ggplot(data, aes_string(x=x_attr, y=y_attr, color="TARGET")) +
     geom_point(alpha=0.7, size=3) +
     labs(title=paste("Supervised Scatter Plot:", x_attr, "vs", y_attr),
@@ -252,7 +239,11 @@ create_supervised_scatterplot(data_filtered, "IPouts", "DP")
 
 ### Interpretation:
 
----placeholder text—
+In the HBP vs SO plot, most of the datapoints concentrate at the average low HBP which is 40 and a wide range of SO which is around 250 to 1500. 120-160 HBP could be interpreted as outliers. There is no recognizable correlation between the strike outs and hit by pitcher across all of the performance level, but it looks like team with “high” target falls in the higher numbers of hit by pitcher.
+
+In the CG vs SHO plot, there are datapoints across all values of CG and they mostly concentrate at less than 100. But there is a trend in the SHO values. It is divided into 3 layers with teams in the “low” target are mostly at bottom, teams in the “average” target stay at the middle and teams in the “high” target stay at the top. It represents that the SHO could be used to predict the win percentage. 
+
+The IPouts vs DP plot has a small correlation here. The higher number of IPouts means higher number of DPs. Some records of “low” target teams lies in the corner near 0 but the the majority of the data falls between 3000-4500IPouts and 50-200 DP.
 
 ------------------------------------------------------------------------
 
@@ -269,7 +260,6 @@ data_filtered <- data_filtered %>%
 # density plots for Wins Percentage and Errors Per Game
 create_density_plots <- function(data) {
   
-  # Density plot, Wins Percentage grouped by TARGET
   p1 <- ggplot(data, aes(x=WP, fill=TARGET)) +
     geom_density(alpha=0.5) +
     labs(title="Density Plot: Wins Percentage by TARGET", x="Wins Percentage", y="Density") +
@@ -277,7 +267,6 @@ create_density_plots <- function(data) {
     scale_fill_manual(values = c("LOW" = "red", "AVERAGE" = "yellow", "HIGH" = "green")) +
     theme(legend.position = "bottom")
   
-  # Density plot for Errors Per Game (EPG) grouped by TARGET
   p2 <- ggplot(data, aes(x=EPG, fill=TARGET)) +
     geom_density(alpha=0.5) +
     labs(title="Density Plot: Errors Per Game by TARGET", x="Errors Per Game", y="Density") +
@@ -285,7 +274,6 @@ create_density_plots <- function(data) {
     scale_fill_manual(values = c("LOW" = "red", "AVERAGE" = "yellow", "HIGH" = "green")) +
     theme(legend.position = "bottom")
 
-  # Arrange side by side
   gridExtra::grid.arrange(p1, p2, ncol = 2)
   
 }
@@ -295,7 +283,11 @@ create_density_plots(data_filtered)
 
 ### Interpretation:
 
-placeholder text
+Generally, the distribution of all 3 classes of the TARGET attribute are expected. Teams in the “Low” class has the wins percentage in the range of around 0 to 0.4 with a peak at 0.375. Teams in the “Average” class falls in the range of 0.375 to 0.64 and the win percentage of “High” class teams is higher than 0.6 with a peak at 0.64.
+
+In the density plot of errors per game by Target, the peak of the “High” teams is the nearest to 0 indicating that they usually make very small amount of errors. “Low” teams has a spread of errors per game between 1 to 1.5 indicating their inconsistency in performance. Teams in “average” class has a very high peak between the “high” and “low” representing their moderate errors at approximately 0.75  in each game.
+
+To sum up, teams with high wins percentage make less errors per game and their performance is more consistent. In contrast, teams with less wins percentage make more errors and have high variability in their performance.
 
 ------------------------------------------------------------------------
 
@@ -321,19 +313,18 @@ create_histograms_for_team <- function(team_name, data) {
   # Filter data for selected team
   team_data <- data %>% filter(name == team_name)
 
-  # histogram for (W)
+  # (W)
   p1 <- ggplot(team_data, aes(x=W)) +
     geom_histogram(binwidth = 2, fill="blue", color="black") +
     labs(title=paste(team_name, "- Wins"), x="Wins", y="Count") +
     theme_minimal()
 
-  # histogram for (L)
+  # (L)
   p2 <- ggplot(team_data, aes(x=L)) +
     geom_histogram(binwidth = 2, fill="red", color="black") +
     labs(title=paste(team_name, "- Losses"), x="Losses", y="Count") +
     theme_minimal()
 
-  # Arrange histograms side by side
   gridExtra::grid.arrange(p1, p2, ncol = 2)
 }
 
@@ -347,7 +338,9 @@ for (team in teams) {
 
 ### Interpretation:
 
-placeholder text
+The table illustrates the  performance of teams that won the World Series. The value of the “Low” class is 0 for all teams, which means that the winners have average to high performance. Some teams have higher “average” values than “high” indicating that they have chance to win even though their performance is not highly rated.
+
+The histograms show the distributions of the wins and losses in all the winning World Series of all teams. Based on the height of the columns, we can recognize the performance that the teams usually have when they win a World Series tournament. It is hard to see the trend in the histograms of teams winning only once or twice, but teams like New York Yankee won many time and they have the number of wins around 95 to 105 with a peak at almost 98 and the number of losses between 50 to 65 with a peak at nearly 53 and 56.
 
 ------------------------------------------------------------------------
 
@@ -402,7 +395,14 @@ print(coefficients)
 
 ### Interpretation:
 
-placeholder text
+|                        |                                                                                                                                                    |
+|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Intercept = 0.4957** | This represents the baseline success prediction when all other variables are 0. In this case, it is 49.57%.                                        |
+| **H_z = 0.0197**       | This shows a slight positive relationship between Hits By Batters and team success. For every unit increase in H, success increases by 1.97%.      |
+| **SO_z = -0.0767**     | This shows a negative relationship between Strikeouts By Batters and team success. For every unit increase in SO, success decreases by 7.67%.      |
+| **SOA_z = 0.0734**     | This shows a positive relationship between Strikeouts By Pitchers and team success. For every unit increase in SOA, success increases by 7.34%.    |
+| **SHO_z = 0.0302**     | This shows a positive relationship between Shutouts and team success. For every unit increase in SHO, success increases by 3.02%.                  |
+| **FP_z = -0.0012**     | This shows a slight negative relationship between Fielding Percentage and team success. For every unit increase in FP, success decreases by 0.12%. |
 
 ------------------------------------------------------------------------
 
@@ -462,7 +462,6 @@ calculate_accuracy <- function(model, train_data, test_data) {
   return(list(train_accuracy = train_accuracy, test_accuracy = test_accuracy))
 }
 
-# Calculate and print accuracies for each model
 accuracy_model1 <- calculate_accuracy(model1, train_data, test_data)
 cat("Model 1 - Training Accuracy:", accuracy_model1$train_accuracy, "\n")
 cat("Model 1 - Testing Accuracy:", accuracy_model1$test_accuracy, "\n\n")
@@ -478,7 +477,19 @@ cat("Model 3 - Testing Accuracy:", accuracy_model3$test_accuracy, "\n\n")
 
 ### Interpretation:
 
-placeholder text
+Model Performance Overview:
+
+-   Model 1 has the highest training and testing accuracy (90.81% training, 89.46% testing). This model (likely) fits the data better than the other two models.
+
+-   2 and 3 have slightly worse accuracy both in training and testing, with Model 3 having the lowest performance (87.44% training, 85.01% testing).
+
+Training vs Testing Accuracy:
+
+-   Across all models, training accuracy is higher than testing accuracy, but the difference between them is small. This shows that none of the models are severely overfitting, as overfitting would manifest in a much larger difference between training and testing accuracies.
+
+-   Model 1 has a slightly larger gap between training and testing accuracies compared to the others, which could suggest it is a bit more prone to overfitting than the other two models, but it's still within an acceptable range.
+
+Based on the generated decision trees, the most important variable for determining the target variable is R (runs). Each tree places runs at the top (closest to the root), and then re-uses runs for fine-tuning the response. Other valuable variables are SV and RA, which are used in the second or third levels. All three trees are able to make their predictions from knowing just these three varaibles.
 
 ------------------------------------------------------------------------
 
